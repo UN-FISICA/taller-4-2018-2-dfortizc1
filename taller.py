@@ -57,15 +57,12 @@ if __name__ == "__main__":
                 y[j].append(abs(0 - df.calc(x0)))
             else:
                 y[j].append(abs(-1 - df.calc(x0)))
-            #print("xj = ",x[j])
-            #print("yj = ",y[j])
             i += 1
         j += 1
 
-    #line1, = plb.plot(x[0],y[0],linestyle='dashed')
-    #line2, = plb.plot(x[1],y[1],linestyle='dashdot')
-    #line3, = plb.plot(x[2],y[2],linestyle='dotted')
-    line4, = plb.plot(x[3][995:1000],y[3][995:1000])
-    #plb.legend((line1, line2, line3, line4),('adelante','central','extrapolada','segunda derivada'))
-    #plb.legend((line4,),('segunda',))
+    line1, = plb.plot(x[0],y[0],linestyle='dashed')
+    line2, = plb.plot(x[1],y[1],linestyle='dashdot')
+    line3, = plb.plot(x[2],y[2],linestyle='dotted')
+    line4, = plb.plot(x[3],y[3])
+    plb.legend((line1, line2, line3, line4),('adelante','central','extrapolada','segunda derivada'))
     plb.show()
