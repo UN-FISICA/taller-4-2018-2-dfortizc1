@@ -55,21 +55,24 @@ class Zeros:
                     error = abs(self.f(x0))
                     iteracion += 1
 
-                #return (x0, self.f(x0))
                 return x0
                 
             elif(self.met == "newton-sp"):
                 root = optimize.newton(self.f,vi)
                 return root
 
+            elif(self.met == "fsolve-sp"):
+                root = optimize.fsolve(self.f,vi)
+                return root
+
         elif(type(vi) == type((3,14159))):
             if((self.f(vi[0]) < 0) and (self.f(vi[1]) > 0)):
-                    x1 = vi[0]
-                    x2 = vi[1]
+                x1 = vi[0]
+                x2 = vi[1]
             elif((self.f(vi[1]) < 0) and (self.f(vi[0]) > 0)):
-                    x1 = vi[1]
-                    x2 = vi[0]
-
+                x1 = vi[1]
+                x2 = vi[0]
+                
             if(self.met == "bisectriz"):
                 x3 = (x1+x2)/2
                 error = abs(self.f(x3))
@@ -86,7 +89,6 @@ class Zeros:
                     error = abs(self.f(x3))
                     iteracion += 1
 
-                #return (x3,self.f(x3))
                 return x3
                 
             elif(self.met == "interpolacion"):
@@ -103,12 +105,7 @@ class Zeros:
                     x3 = ((x2*self.f(x1)) - (x1*self.f(x2)))/(self.f(x1)-self.f(x2))
                     error = abs(self.f(x3))
                     iteracion += 1
-                #return(x3,self.f(x3))
                 return x3
-                
-            elif(self.met == "fsolve-sp"):
-                root = optimize.fsolve(self.f,vi[0])
-                return root
 
             elif(self.met == "brentq-sp"):
                 root = optimize.brentq(self.f,vi[0],vi[1])
@@ -128,7 +125,6 @@ if __name__ == "__main__":
     from scipy import optimize
     f1 = math.sin
     f2 = math.cos
-    f3 = math.exp
     x0 = math.pi
     
     dx = np.linspace(1,10e-10,1000)
@@ -142,17 +138,20 @@ if __name__ == "__main__":
             df = Derivada(f1,metodo,dx[i])
             x[j].append(dx[i])
             if(j==3):
-                y[j].append(abs(0 - df.calc(x0)))
+                y[j].append(abs(-f1(x0/2) - df.calc(x0/2)))
             else:
-                y[j].append(abs(-1 - df.calc(x0)))
+                y[j].append(abs(f2(x0) - df.calc(x0)))
             i += 1
         j += 1
 
     line1, = plb.plot(x[0],y[0],linestyle='dashed')
     line2, = plb.plot(x[1],y[1],linestyle='dashdot')
     line3, = plb.plot(x[2],y[2],linestyle='dotted')
-    line4, = plb.plot(x[3],y[3])
-    plb.legend((line1, line2, line3, line4),('adelante','central','extrapolada','segunda derivada'))
+    plb.legend((line1, line2, line3),('adelante','central','extrapolada'))
+    plb.show()
+
+    line4, = plb.plot(x[3][0:90],y[3][0:90])
+    plb.legend((line4,),('segunda derivada',))
     plb.show()
     
     x2 = []
@@ -164,18 +163,15 @@ if __name__ == "__main__":
     while(j<6):
         metodo = "newton" if j==0 else "bisectriz" if j==1 else "interpolacion" if j==2 else "newton-sp" if j==3 else "fsolve-sp" if j==4 else "brentq-sp" 
         raiz = Zeros(f1,metodo,error,max_iter)
-        if(j==0 or j==3):
-           x1 = raiz.zero(xi[0])
-           y1 = j
+        if(j==0 or j==3 or j==4):
+            xr = raiz.zero(xi[0])
         else:
-            x1 = raiz.zero(xi)
-            y1 = j
-        x2.append(x1)
-        y2.append(y1)
+            xr = raiz.zero(xi)
+        x2.append(xr)
+        print("Método = ",metodo,"\t Raíz = ", xr)
         j += 1
 
-    print(x2)
-    print(y2)
+        
 
 
 
